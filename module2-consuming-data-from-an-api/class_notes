@@ -1,0 +1,38 @@
+router = rules that decide to listen to a path and return something
+- can listen to any static path
+
+Variable Rules - e.g capture variable url in <>
+- e.g pulling ian's facebook page using /user/<ianforrest>
+- only certain characters can be present in url; ways to convert exist
+
+HTTP responses
+- 200 is good
+- 404 is bad
+- range used in yesterdays assignment: 500s, used often in own application
+
+Types of Requests:
+- Get - standard request; ask for a page, get a response
+    - what most routes on an application refer to
+- Post - request that includes information
+    - generally the type of request that is made when a user
+    fills out a form
+
+- most http resquests are strings; if ints, need to cast int function within route
+
+HTTP Methods:
+- can specify route AND Methods(get/post)
+- can specify how to listen to get and post Requests
+- different logic based on what request is
+    - e.g if post request from User, webpage should login
+    - if get request, do not load that webpage
+
+Templates
+- Jinja2, HTML with curly tags {}
+- {} standard for Templates
+- determine overall layout of web application
+    - title
+    - ordered list
+- curly blocks {} perform python logic
+- templates can inherit from one another
+
+
