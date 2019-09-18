@@ -41,7 +41,7 @@ class User(DB.Model):
 
 class Tweet(DB.Model):
     """Tweets."""
-    id = DB.Column(DB.Integer, primary_key=True)
+    id = DB.Column(DB.BigInteger, primary_key=True)
     text = DB.Column(DB.Unicode(500))
     
     # add embeddings to each class, considered a column
@@ -53,7 +53,7 @@ class Tweet(DB.Model):
     # add reference to each tweet pointing back to user by creating user_id (to link)
     # establish relationship between user and tweets with 'user' variable
     # establish one user to many tweets relationship
-    user_id = DB.Column(DB.Integer, DB.ForeignKey('user.id'), nullable=False)
+    user_id = DB.Column(DB.BigInteger, DB.ForeignKey('user.id'), nullable=False)
     user = DB.relationship('User', backref=DB.backref('tweets', lazy=True))
 
     def __repr__(self):

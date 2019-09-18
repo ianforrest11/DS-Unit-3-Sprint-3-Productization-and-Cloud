@@ -41,4 +41,13 @@ def create_app():
         # add title (defined in html file) and users (defined above and in html)
         return render_template('base.html', title = 'Home', users = users)
 
+    # add new route called reset, drops everything
+    # saves us time, dont have to delete and create DB manually each time we run app
+    # add '/reset
+    @app.route('/reset')
+    def reset():
+        DB.drop_all()
+        DB.create_all()
+        return render_template('base.html', title = 'DB Reset!', users = [])
+    
     return app

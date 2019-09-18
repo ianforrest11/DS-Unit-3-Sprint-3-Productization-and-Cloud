@@ -34,3 +34,25 @@ BASILICA = basilica.Connection(config('BASILICA_KEY'))
 # >>> embedding = BASILICA.embed_sentence(tweet_text, model = 'twitter')
 # >>> embedding
 # [-0.293004, -0.485193, 0.701077, -0.681001,
+# >>> twitter_user.screen_name
+# 'Austen'
+# >>> db_user = User(id = twitter_user.id, name=twitter_user.screen_name, newest_tweet_id = tweets[0].id)
+# >>> embeddings = [BASILICA.embed_sentence(tweet.full_text, model='twitter') for tweet in tweets]
+# >>> db_tweets = []
+# >>> for embedding, tweet in zip(embeddings, tweets):
+# ...   db_tweets.append(Tweet(id=tweet.id, text=tweet.full_text[:500], embedding=embedding))
+# ... 
+# >>> db_tweets[0]
+# <TWEET Is there a website that keeps track of 
+# all of the people and things that are cancelled because I 
+# can’t keep them all straight>
+# >>> db_tweets[0].id
+# 1174161736703889408
+# >>> db_tweets[0].embedding
+# [-0.60563, 0.263209, 1.04776,
+
+# >>> for tweet in tweets:
+# ...   embedding = BASILICA.embed_sentence(tweet.full_text, model = 'twitter')
+# ...   db_tweet = Tweet(id = tweet.id, text = tweet.full_text[:500],embedding=embedding)
+# ...   DB.session.add(db_tweet)
+# ...   db_user.tweets.append(db_tweet)
