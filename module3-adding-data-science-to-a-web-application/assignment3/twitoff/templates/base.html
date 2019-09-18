@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TwitOff - {{ title }}</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic"/>
+  </head>
+  <body>
+    <nav>
+      <a href="/" class="brand"><span>TwitOff!</span></a>
+    </nav>
+
+    <article class="card" style="padding: 3em 1em;">
+      <!--blocks allow for extensions of templates...e.g. make a user.html page-->
+      {% block content %}
+      <div>
+        <h1>Users</h1>
+        {% for user in users %}
+        <a href="/user/{{ user.name }}"><span class="stack">{{ user.name }}</span></a>
+        {% endfor %}
+        <!--form allows user to type username into application-->
+        <form action="/user" method="post">
+          <input type="text" name="user_name" placeholder="User to add">
+          <input type="submit" value="Add User">
+        </form>
+      </div>
+      {% endblock %}
+    </article>
+  </body>
+</html>

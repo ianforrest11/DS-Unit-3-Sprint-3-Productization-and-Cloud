@@ -1,0 +1,15 @@
+- ENV attribute does not protect keys, need to change to FLASK_ENV
+- not good for decouple
+- flask relies on dotenv()
+
+app.py responsible for config/routing...app 'factory'
+- shouldnt be doing detailed things, thats for twitter.py
+
+Online vs offline machine learning
+- at request time, things happen, pulls data, models trained, etc
+- all fine, but also could not be fine...if get good model, could be heavy and expensive to run
+- if train offline, train more cheaply, import to online from saved ML object
+
+Sprint Challenge:
+- build a working basic flask application
+- hit a basic API, much less complicated than twitter, no authentication required
