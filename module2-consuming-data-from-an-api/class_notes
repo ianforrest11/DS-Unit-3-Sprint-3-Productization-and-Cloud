@@ -35,4 +35,11 @@ Templates
 - curly blocks {} perform python logic
 - templates can inherit from one another
 
+API Keys are secret - keys are equivalent to username and password, do not check into github etc
+- introduce config to get around
+
+Tweepy - python library for interacting with Twitter API
+
+Everytime you create a shell, .env file will be loaded with it
+
 

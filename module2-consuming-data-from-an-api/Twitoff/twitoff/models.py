@@ -28,8 +28,10 @@ DB = SQLAlchemy()
 # will be creating table, define details about the table within class
 class User(DB.Model):
     """Twitter users that we pull and analyze tweets for"""
-    id = DB.Column(DB.Integer, primary_key=True)
+    # change DB.Integer to DB.BigInteger, as we are now pulling Twitter data
+    id = DB.Column(DB.BigInteger, primary_key=True)
     name = DB.Column(DB.String(15), nullable=False)
+    newest_tweet_id = DB.Column(DB.BigInteger)
 
     # define way to represent data in rable, instead of displaying as memory address, e.g.:
     # >>> u1
@@ -40,7 +42,14 @@ class User(DB.Model):
 class Tweet(DB.Model):
     """Tweets."""
     id = DB.Column(DB.Integer, primary_key=True)
-    text = DB.Column(DB.Unicode(280))
+    text = DB.Column(DB.Unicode(500))
+    
+    # add embeddings to each class, considered a column
+    # considered a blob, supported by SQL systems
+    # PickleType is a blob in SQLAlchemy terms
+    # nullable = False makes embedding a required field
+    embedding = DB.Column(DB.PickleType, nullable=False)
+    
     # add reference to each tweet pointing back to user by creating user_id (to link)
     # establish relationship between user and tweets with 'user' variable
     # establish one user to many tweets relationship
