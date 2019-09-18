@@ -3,6 +3,7 @@
 from decouple import config
 from flask import Flask, render_template, request
 from .models import DB, User
+from .twitter import add_user
 
 def create_app():
     """create/configure flask application."""
@@ -35,6 +36,22 @@ def create_app():
         return render_template('base.html',
                                title = 'DB Reset!',
                                users = [])
+    
+    # add user and user/<name>
+    @app.route('/user', methods=['POST'])
+    @app.route('/user/<name>', methods=['GET'])
+    def user(name=None, message=''):
+        name = name or request.values['user_name']
+        try:
+            if request.method == 'POST':
+                add_user(name)
+                message = "User {} successfully added!".format(name)
+            tweets = User.query.filter(User.name == name).one().tweets
+        except Exception as e:
+            message = "Error adding {}: {}".format(name, e)
+            tweets = []
+        return render_template('user.html', title=name, tweets=tweets,
+                               message=message)
     
     return app
     

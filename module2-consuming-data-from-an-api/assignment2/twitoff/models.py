@@ -33,9 +33,11 @@ class Tweet(DB.Model):
     
     
     added __repr__ function to show content of Tweet class as text (vs. as location in memory)"""
+    # added date property to each tweet
     id = DB.Column(DB.BigInteger, 
                    primary_key = True)
     text = DB.Column(DB.Unicode(500))
+    date = DB.Column(DB.DateTime)
     embedding = DB.Column(DB.PickleType,
                           nullable = False)
     user_id = DB.Column(DB.BigInteger,
