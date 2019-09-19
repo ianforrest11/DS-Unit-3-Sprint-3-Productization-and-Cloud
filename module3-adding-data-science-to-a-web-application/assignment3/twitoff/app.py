@@ -3,7 +3,8 @@
 from decouple import config
 from flask import Flask, render_template, request
 from .models import DB, User
-from .twitter import add_or_update_user
+from .twitter import add_or_update_user, update_all_users, remove_user
+from .predict import predict_user
 
 def create_app():
     """create/configure flask application."""
@@ -36,6 +37,14 @@ def create_app():
                                title = 'DB Reset!',
                                users = [])
     
+    # add route to update tweets for twitter users in database
+    # to be triggered by 'update' button on base.html page
+    @app.route('/update')
+    def update():
+        update_all_users()
+        users = User.query.all()
+        return render_template('base.html', title='Update all users!', users=users)
+    
     # add user and user/<name>
     @app.route('/user', methods=['POST']) # trigger this if post request (adding to db)
     @app.route('/user/<name>', methods=['GET']) # trigger this if get request (pulling existing from db)
@@ -51,6 +60,41 @@ def create_app():
             tweets = []
         return render_template('user.html', title=name, tweets=tweets,
                                message=message)
+    
+    # add route for logistic regression comparision; used for tweet predictor
+    # will always be post
+    @app.route('/compare', methods=['POST'])
+    def compare(message=''):
+        # pull users from DB
+        user1, user2 = sorted([request.values['user1'],
+                               request.values['user2']])
+        # account for situation where users are the same - invalid
+        if user1 == user2:
+            message = 'Cannot compare a user to themselves!'
+        # pull tweet text value from User entry
+        # turned logistic regression prediction to an integer, to be desplayed in message
+        # add messages, space for confidence interval to be displayed in response message
+        else:
+            tweet_text = request.values['tweet_text']
+            confidence = int(predict_user(user1, user2, tweet_text) * 100)
+            if confidence >= 50:
+                message = f'"{tweet_text}" is more likely to be said by {user1} than {user2}, with {confidence}% confidence'
+            else:
+                message = f'"{tweet_text}" is more likely to be said by {user2} than {user1}, with {100-confidence}% confidence'
+        return render_template('prediction.html', title='Prediction', message=message)
+    
+    # @app.route('/remove', methods = ['POST'])
+    # def remove():
+    #     name = request.values['user_name']
+    #     try:
+    #         # if request.method == 'POST':
+    #         remove_user(name)
+    #         message = "User {} (and related tweets) successfully deleted!".format(name)
+    #     except Exception as e:
+    #         message = "Error removing {}: {}".format(name, e)
+    #     users = User.query.all()
+    #     return render_template('base.html', title='not working', 
+    #                            message=message, users=users)
     
     return app
     

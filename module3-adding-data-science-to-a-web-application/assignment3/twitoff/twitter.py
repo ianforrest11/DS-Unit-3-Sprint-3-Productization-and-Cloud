@@ -12,7 +12,20 @@ TWITTER_AUTH.set_access_token(config('TWITTER_ACCESS_TOKEN'),
 TWITTER = tweepy.API(TWITTER_AUTH)
 BASILICA = basilica.Connection(config('BASILICA_KEY'))
 
-
+def remove_user(username):
+    try:
+        db_user = User.query.get(username.id)
+        tweets = db_user.tweets
+        if tweets:
+            db_user.newest_tweet_id = tweets[0].id
+        DB.session.remove(tweets)
+        DB.session.remove(db_user)
+        DB.session.commit()
+    except Exception as e:
+        print('Error processing {}: {}'.format(username, e))
+        raise e
+    else:
+        DB.session.commit()
 
 def add_or_update_user(username):
     """Add or update a user and their Tweets, error if not a Twitter user."""
@@ -20,7 +33,7 @@ def add_or_update_user(username):
         # define twitter user, add to db, pull tweets
         # or, pull existing user and tweets
         twitter_user = TWITTER.get_user(username)
-        db_user = (User(id=twitter_user.id, name=username) or
+        db_user = (User.query.get(twitter_user.id) or
                    User(id=twitter_user.id, name=username))
         DB.session.add(db_user)
         # want as many non-retweet, non-reply
@@ -51,3 +64,14 @@ def add_or_update_user(username):
     # if no errors happen, commit data!
     else:
         DB.session.commit()
+
+# create function to update all users present in the DB
+def update_all_users():
+    """Update all Tweets for all Users in the User table."""
+    try:
+        for user in User.query.all():
+            add_or_update_user(user.name)
+    except Exception as e:
+        print('Error processing {}: {}'.format(user.name, e))
+        raise e
+        

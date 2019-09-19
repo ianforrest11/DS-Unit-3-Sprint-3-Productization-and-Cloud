@@ -29,6 +29,6 @@ def predict_user(user1_name, user2_name, tweet_text):
     tweet_embedding = BASILICA.embed_sentence(tweet_text, model = 'twitter')
     # return 1 if tweet more likely to be tweeted by user1, 0 if user2
     # running predict_proba will give you probabilities of how likely 1 or 0
-    return log_reg.predict(np.array(tweet_embedding).reshape(1, -1))
+    return log_reg.predict_proba(np.array([tweet_embedding]))[:,1]
     
     
