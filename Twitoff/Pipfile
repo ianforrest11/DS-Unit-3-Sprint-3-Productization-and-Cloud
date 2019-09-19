@@ -14,6 +14,9 @@ tweepy = "*"
 python-decouple = "*"
 flask = "*"
 gunicorn = "*"
+psycopg2 = "*"
+postgresql-server-dev-nn = "*"
+libpq-dev = "*"
 
 [requires]
 python_version = "3.7"
