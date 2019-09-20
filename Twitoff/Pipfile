@@ -15,9 +15,6 @@ python-decouple = "*"
 flask = "*"
 gunicorn = "*"
 pipfile = "*"
-psycopg2 = "*"
-postgresql-server-dev-nn = "*"
-libpq-dev = "*"
 psycopg2-binary = "*"
 
 [requires]
